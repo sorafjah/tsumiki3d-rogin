@@ -40,14 +40,18 @@
         #move-y-minus { grid-area: y-down; margin-top: 5px;}
 
         #instructionText { position: absolute; top: 20px; right: 20px; padding: 8px 12px; background-color: rgba(255,255,255,0.8); color: #333; border-radius: 5px; font-size: 13px; z-index: 10; text-align: right; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
-        #loading-indicator, #loginModal { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); padding: 20px 30px; background-color: rgba(0,0,0,0.75); color: white; border-radius: 8px; font-size: 18px; z-index: 2500; display: none; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
+        
+        /* ===== ここを修正しました ===== */
+        #loading-indicator { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); padding: 20px 30px; background-color: rgba(0,0,0,0.75); color: white; border-radius: 8px; font-size: 18px; z-index: 2500; display: none; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
+        /* ============================ */
+        
         .custom-modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.5); align-items: center; justify-content: center; }
         .custom-modal-content { background-color: #fefefe; margin: auto; padding: 25px; border: 1px solid #bbb; width: 90%; max-width: 500px; border-radius: 10px; text-align: center; box-shadow: 0 5px 20px rgba(0,0,0,0.25); position: relative; }
         .custom-modal-close { color: #888; position: absolute; top: 10px; right: 15px; font-size: 28px; font-weight: bold; cursor: pointer; line-height: 1; }
         .custom-modal-close:hover, .custom-modal-close:focus { color: #333; text-decoration: none; }
         #customModalMessage { font-size: 16px; color: #333; margin-top: 10px; margin-bottom: 15px; }
 
-        /* ===== ログイン画面用のスタイルを追加 ===== */
+        /* ログイン画面用のスタイル */
         #loginModal { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-color: rgba(0, 0, 0, 0.6); display: flex; align-items: center; justify-content: center; z-index: 3000; }
         #loginBox { background-color: white; padding: 30px 40px; border-radius: 10px; text-align: center; box-shadow: 0 5px 20px rgba(0,0,0,0.3); }
         #loginBox h3 { margin-top: 0; color: #333; }
@@ -59,8 +63,7 @@
         #anonymousButton:hover { background-color: #4b5563; }
         #logoutButton { display: none; } /* 初期状態では非表示 */
         #userInfo { position: absolute; top: 20px; left: 50%; transform: translateX(-50%); background: rgba(255,255,255,0.8); padding: 5px 15px; border-radius: 20px; font-size: 14px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); color: #333; display: none;}
-        /* ======================================= */
-
+        
         #saveModal .save-new-section { margin: 20px 0; display: flex; gap: 10px; align-items: center; justify-content: center; flex-wrap: wrap;}
         #saveModal input[type="text"] { padding: 8px 12px; border: 1px solid #ccc; border-radius: 4px; font-size: 16px; flex-grow: 1; min-width: 180px; }
         #saveModal button { padding: 8px 15px; border-radius: 4px; border: none; cursor: pointer; font-size: 16px; transition: background-color 0.3s; }
@@ -90,6 +93,7 @@
             <button id="anonymousButton">ログインせずに続ける</button>
         </div>
     </div>
+
     <div id="container"></div>
     <div id="userInfo"></div>
     <div id="loading-indicator">処理中...</div>
@@ -99,7 +103,8 @@
         <button id="deleteButton" class="action-button">削除</button>
         <button id="fixViewButton" class="action-button">視点固定</button>
         <button id="toggleEdgesButton" class="action-button">辺を表示</button> 
-        <button id="logoutButton" class="action-button red">ログアウト</button> </div>
+        <button id="logoutButton" class="action-button red">ログアウト</button>
+    </div>
 
     <div class="color-palette"></div>
 
@@ -152,14 +157,12 @@
         const confirmYesButton = document.getElementById('confirmYesButton');
         const confirmNoButton = document.getElementById('confirmNoButton');
         
-        // ===== ログイン関連の要素を取得 =====
         const loginModal = document.getElementById('loginModal');
         const nicknameInput = document.getElementById('nicknameInput');
         const loginButton = document.getElementById('loginButton');
         const anonymousButton = document.getElementById('anonymousButton');
         const logoutButton = document.getElementById('logoutButton');
         const userInfo = document.getElementById('userInfo');
-        // ===================================
         
         if (customModalClose) customModalClose.onclick = () => customModal.style.display = "none";
         if (saveModalClose) saveModalClose.onclick = () => saveModal.style.display = "none";
@@ -214,9 +217,8 @@
                             return;
                         }
                         
-                        // ===== ニックネームに応じてDBのパスを変更 =====
                         if (currentNickname) {
-                            const sanitizedNickname = currentNickname.replace(/[\.#$\[\]]/g, '_'); // Firestoreのパスに使えない文字を置換
+                            const sanitizedNickname = currentNickname.replace(/[\.#$\[\]]/g, '_');
                             const nicknamePath = `artifacts/${appId}/nicknames/${sanitizedNickname}`;
                             cubesCollectionRef = collection(db, `${nicknamePath}/cubes`);
                             savesCollectionRef = collection(db, `${nicknamePath}/saves`);
@@ -230,7 +232,6 @@
                             userInfo.textContent = 'オフラインモード';
                             userInfo.style.display = 'block';
                         }
-                        // ============================================
 
                         isAuthReady = true; 
                         resolve(); 
@@ -363,6 +364,7 @@
         }
         
         async function saveCurrentState() {
+            if (!currentNickname) { showUserMessage("作品を保存・読込するにはニックネームでのログインが必要です。"); return; }
             const saveNameInput = document.getElementById('saveNameInput');
             const saveName = saveNameInput.value.trim();
             if (!saveName) { showUserMessage("作品名を入力してください。"); return; }
@@ -391,19 +393,16 @@
             }
 
             try {
-                // 現在のブロックを全削除
                 const currentCubesSnapshot = await getDocs(cubesCollectionRef);
                 const deleteBatch = writeBatch(db);
                 currentCubesSnapshot.forEach(d => deleteBatch.delete(d.ref));
                 await deleteBatch.commit();
                 
-                // 保存データを取得
                 const saveDoc = await getDoc(doc(savesCollectionRef, saveId));
                 if (!saveDoc.exists()) throw new Error("保存データが見つかりません。");
                 const savedCubesData = saveDoc.data().cubes;
                 const saveName = saveDoc.data().name;
 
-                // 保存データからブロックを再作成
                 const addBatch = writeBatch(db);
                 savedCubesData.forEach(cubeData => {
                     const newCubeRef = doc(cubesCollectionRef);
@@ -411,7 +410,6 @@
                 });
                 await addBatch.commit();
 
-                // Firestoreからのリアルタイム同期を再開
                 await loadCubesFromFirestore();
                 
                 showUserMessage(`「${saveName}」を読み込みました。`);
@@ -607,7 +605,6 @@
             loadingIndicator.style.display = 'block';
             if (unsubscribeFromCubes) unsubscribeFromCubes(); 
             
-            // Clear local cubes before listening to new data
             while(cubes.length > 0) {
                 scene.remove(cubes.pop());
             }
@@ -645,7 +642,6 @@
             });
         }
         
-        // ===== アプリ起動処理を変更 =====
         async function startApp() {
             loadingIndicator.style.display = 'block';
             try {
@@ -659,12 +655,11 @@
         }
         
         function main() {
-            // ログインボタンの処理
             loginButton.addEventListener('click', () => {
                 const nickname = nicknameInput.value.trim();
                 if (nickname) {
                     currentNickname = nickname;
-                    localStorage.setItem('tsumiki_nickname', nickname); // ニックネームを保存
+                    localStorage.setItem('tsumiki_nickname', nickname);
                     loginModal.style.display = 'none';
                     startApp();
                 } else {
@@ -672,33 +667,28 @@
                 }
             });
 
-            // ログインせずに続けるボタンの処理
             anonymousButton.addEventListener('click', () => {
                 currentNickname = null;
                 loginModal.style.display = 'none';
                 startApp();
             });
 
-            // ログアウトボタンの処理
             logoutButton.addEventListener('click', () => {
-                localStorage.removeItem('tsumiki_nickname'); // 保存したニックネームを削除
-                location.reload(); // ページをリロードしてログイン画面に戻る
+                localStorage.removeItem('tsumiki_nickname');
+                location.reload();
             });
 
-            // ページ読み込み時に保存されたニックネームを確認
             const savedNickname = localStorage.getItem('tsumiki_nickname');
             if (savedNickname) {
                 currentNickname = savedNickname;
                 loginModal.style.display = 'none';
                 startApp();
             } else {
-                loginModal.style.display = 'flex'; // ログイン画面を表示
+                loginModal.style.display = 'flex';
             }
         }
         
         main();
-        // ==============================
-
     </script>
 </body>
 </html>
