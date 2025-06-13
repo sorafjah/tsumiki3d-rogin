@@ -15,7 +15,12 @@
     </script>
     <style>
         body { margin: 0; overflow: hidden; font-family: 'Inter', sans-serif; background-color: #f0f8ff; }
-        #container { width: 100vw; height: 100vh; display: block; }
+        #container { 
+            width: 100vw; 
+            height: 100vh; 
+            display: block; 
+            touch-action: manipulation; /* 変更点: ダブルタップ拡大を無効化 */
+        }
         /* .controls のスタイルを変更 */
         .controls { 
             position: absolute; 
@@ -180,12 +185,12 @@
         import { getFirestore, doc, setDoc, getDoc, collection, addDoc, getDocs, deleteDoc, onSnapshot, query, serverTimestamp, writeBatch, setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         const firebaseConfig = {
-          apiKey: "AIzaSyBk-lnmwZnhPTj3yQuMfRBc3u5HFXko95k",
-          authDomain: "tsumiki3d.firebaseapp.com",
-          projectId: "tsumiki3d",
-          storageBucket: "tsumiki3d.firebasestorage.app",
-          messagingSenderId: "245181141529",
-          appId: "1:245181141529:web:a95fa288ab74de8ceb5088"
+            apiKey: "AIzaSyBk-lnmwZnhPTj3yQuMfRBc3u5HFXko95k",
+            authDomain: "tsumiki3d.firebaseapp.com",
+            projectId: "tsumiki3d",
+            storageBucket: "tsumiki3d.firebasestorage.app",
+            messagingSenderId: "245181141529",
+            appId: "1:245181141529:web:a95fa288ab74de8ceb5088"
         };
         
         const appId = firebaseConfig.appId;
