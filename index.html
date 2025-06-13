@@ -14,12 +14,18 @@
         }
     </script>
     <style>
-        body { margin: 0; overflow: hidden; font-family: 'Inter', sans-serif; background-color: #f0f8ff; }
+        body { 
+            margin: 0; 
+            overflow: hidden; 
+            font-family: 'Inter', sans-serif; 
+            background-color: #f0f8ff;
+            touch-action: manipulation; /* 変更点: ページ全体に適用 */
+        }
         #container { 
             width: 100vw; 
             height: 100vh; 
             display: block; 
-            touch-action: manipulation; /* 変更点: ダブルタップ拡大を無効化 */
+            /* ↑ touch-actionはこちらから削除し、bodyへ移動しました */
         }
         /* .controls のスタイルを変更 */
         .controls { 
