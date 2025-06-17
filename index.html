@@ -171,10 +171,12 @@
     <div class="color-palette"></div>
 
     <div id="block-controls-panel">
-        <button id="move-z-plus" class="move-block-button" data-axis="z" data-dir="1" title="奥へ移動">▲</button>
+        <!-- 修正箇所: ▲と▼の data-dir と title を入れ替え -->
+        <button id="move-z-plus" class="move-block-button" data-axis="z" data-dir="-1" title="手前へ移動">▲</button>
         <button id="move-x-minus" class="move-block-button" data-axis="x" data-dir="-1" title="左へ移動">◀</button>
         <button id="move-x-plus" class="move-block-button" data-axis="x" data-dir="1" title="右へ移動">▶</button>
-        <button id="move-z-minus" class="move-block-button" data-axis="z" data-dir="-1" title="手前へ移動">▼</button>
+        <button id="move-z-minus" class="move-block-button" data-axis="z" data-dir="1" title="奥へ移動">▼</button>
+        <!-- 修正ここまで -->
         <button id="move-y-plus" class="move-block-button" data-axis="y" data-dir="1" title="上へ移動">上へ</button>
         <button id="move-y-minus" class="move-block-button" data-axis="y" data-dir="-1" title="下へ移動">下へ</button>
     </div>
